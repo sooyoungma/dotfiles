@@ -3,6 +3,13 @@
 import os
 import re
 
+path_to_token = input("Path to token: ")
+with open('{token}'.format(token=input('Path to token: ')), 'r') as f:
+	token = f.read().rsplit()[0]
+print(token)
+
+#token = path_to_token
+
 path = '/v2/droplets'
 scheme = 'https'
 authority = 'api.digitalocean.com'
