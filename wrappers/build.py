@@ -66,9 +66,9 @@ def get_host(droplet_id, writeout_file):
     writeout_file_i = writeout_file.split('.')[0] \
      + writeout_file.split('.')[1] + '-'+ str(droplet_id) + '.json' os.system('curl -X GET "https://api.digitalocean.com/v2/droplets/{droplet_id}" \
     -H "Content-Type: application/json" -H "Authorization: Bearer {linux_pa_token}">                                   
-    {writeout_file_i}'.format(droplet_id=droplet_id,linux_pa_token=linux_pa_token,writeout_file_i=writeout_file_i))
-    payload = json.load(open(writeout_file_i))
+    {writeout_file_i}'.format(droplet_id=droplet_id,linux_pa_token=linux_pa_token,writeout_file_i=writeout_file_i))payload = json.load(open(writeout_file_i))
     ip_address = payload['droplet']['networks']['v4'][0]['ip_address']
+    
     return ip_address
 
 if __name__ == '__main__':

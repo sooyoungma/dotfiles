@@ -71,22 +71,27 @@ def spin_up():
             os.system('{unix_command} > {writeout_file}'             \
                         .format(unix_command=digitalocean.builder(), \
                                 writeout_file=writeout_file))
-            time.sleep(60)
+            time.sleep(60) 
+            #gives you time for the vm to set up 
             return harden(writeout_file)
     else:
         pass # TODO 2
 
 def harden(writeout_file):
     response = json.load(open(writeout_file))
+    #writeout file spits out json object 
     if 'droplets' in response:
         payloads = response['droplets']
+        #checks for more than one droplet 
     else:
         payloads = [response['droplet']]
+        #check for one droplet 
     ip_addresses = []
     for payload in payloads:
         ip_addresses.append(digitalocean.get_host(payload['id'], writeout_file))
     for ip_address in ip_addresses:
         os.system('ssh -o "StrictHostKeyChecking no" root@{ip_address} \'bash -s\' < procedures/remote0.sh'.format(ip_address=ip_address))
+        #sets up root settings. safety procedures 
         os.system('scp /home/soo/.ssh/id_rsa.pub root@{ip_address}:/etc/ssh/soo/authorized_keys'.format(ip_address=ip_address))
         os.system('sh -c \'echo "soo:swordfish" > /home/soo/dotfiles/setup/.credentials\'')
         os.system('scp /home/soo/projects/dotfiles/setup/.credentials root@{ip_address}:/home/soo/'.format(ip_address=ip_address))

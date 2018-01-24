@@ -27,15 +27,22 @@ def builder():
                                         _=_)               \
                                 .replace(' ', '-')         \
                                 for _ in range(vm_count)]
+                                #replace dashes with spaces
+                                #list comprehension ... so " l = ["a", 1, "b", 2, "c", 3]
+                                # lc = [_for _ in l]
     payload['region'] = 'nyc1'
     payload['size']   = '1gb'
     payload['image']  = 'ubuntu-16-04-x64'
     headers = {}
     headers['Authorization'] = 'Bearer {pa_token}'.format(pa_token=pa_token)
     headers['Content-Type'] = 'application/json'
+    
     keys = json.loads(requests.get('https://api.digitalocean.com/v2/account/keys', headers=headers).text)['ssh_keys']
-    payload['ssh_keys'] = [str(key['id']) for key in keys if key['name']==socket.gethostname()]
-    # payload['tags'] = input('payload[\'tags\']: ')
+    #gets SSH key from digital ocean account
+    payload['ssh_keys'] = [str(key['id']) for key in keys if key['name']==socket.gethostname()]4
+    #goes through the json object to find the keys using socket.gethostname() ... --> >>> socket.gethostname()
+    #'soo-Q550LF = key['name']
+
     payload['tags'] = ['test']
     endstate = 'curl -X POST "{endpoint}"            \
                 -d \'{payload}\'                     \
